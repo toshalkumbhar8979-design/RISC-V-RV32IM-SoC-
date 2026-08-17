@@ -1,0 +1,6 @@
+sim/build/
+sim/*.vvp
+sim/*.vcd
+sim/smoke_pc.trace
+tests/smoke.hex
+.tmp/
