@@ -59,6 +59,7 @@ module qspi_ctrl (
             p       <= 2'd0;
             txb     <= 8'h03;
             rxseq   <= 32'h0;
+            rxbit   <= 5'd0;   // fresh receive counter per transaction
             q_cs_n  <= 1'b0;
             x_busy_o <= 1'b1;
             st      <= ST_XMIT;

@@ -17,20 +17,26 @@ _start:
 
         # ---- SPI TFT: pattern DE AD BE EF ----
         lui     t2, 0x40010            # 0x4001_0000
-        # ctrl reg: reset active
-        li      t3, 0
+        # ctrl reg: [2]=CS_N [1]=DC [0]=RST_N
+        li      t3, 0                  # rst low
         sw      t3, 0(t2)
-        li      t3, 1                  # rst high
+        li      t3, 1                  # rst high, cs off
         sw      t3, 0(t2)
-        li      t3, 5                  # rst=1 dc=0 csn=0
+        li      t3, 1                  # rst=1 dc=0 cs=0  (command mode)
         sw      t3, 0(t2)
-        # command 0x28 (display off) - dc=0
+        # command 0x28 (display off)
         li      t4, 0x28
         sw      t4, 4(t2)
+7:      lw      t5, 8(t2)             # wait tft idle
+        andi    t5, t5, 1
+        bnez    t5, 7b
         li      t4, 0x2C               # command write-memory-start
         sw      t4, 4(t2)
-        # switch dc=1, keep cs low
-        li      t3, 7                  # rst=1 dc=1 csn=0
+7:      lw      t5, 8(t2)
+        andi    t5, t5, 1
+        bnez    t5, 7b
+        # data mode: dc=1 keep cs low
+        li      t3, 3                  # rst=1 dc=1 cs=0
         sw      t3, 0(t2)
         # push 4 data pixels, waiting for TX idle before each
         li      t4, 0xDE
@@ -65,7 +71,7 @@ _start:
         sw      zero, 12(t0)           # mtimecmp hi = 0
         la      t2, irq_hand
         csrw    mtvec, t2
-        li      s0, 0x10040
+        li      s0, 0x101F0            # irq counter (word 124: beyond app+padding)
         sw      zero, 0(s0)
         csrsi   mstatus, 8             # MIE = 1
 
@@ -76,13 +82,17 @@ _start:
 
         # ---- PASS ----
         li      t5, 0x600DF00D
-        li      t6, 0x10080
+        li      t6, 0x101F4            # mailbox (word 125, out of code)
         sw      t5, 0(t6)
 4:      j       4b
 
 irq_hand:
-        csrci   mstatus, 8
-        li      s0, 0x10040
+        # acknowledge the level source: push mtimecmp far into the future
+        lui     t0, 0x40030
+        lw      t1, 0(t0)              # mtime lo
+        addi    t1, t1, 1000
+        sw      t1, 8(t0)              # mtimecmp lo
+        li      s0, 0x101F0
         lw      t3, 0(s0)
         addi    t3, t3, 1
         sw      t3, 0(s0)

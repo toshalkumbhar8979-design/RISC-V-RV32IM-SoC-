@@ -23,7 +23,7 @@ module spi_tft (
   output reg         tft_sdi
 );
 
-  reg [9:0] shift;
+  reg [7:0] shift;
   reg       busy;
   reg [1:0] sdiv;
   reg [3:0] bitno;
@@ -35,7 +35,7 @@ module spi_tft (
       tft_cs_n  <= 1'b1;
       tft_sclk  <= 1'b0;
       tft_sdi   <= 1'b0;
-      shift     <= 10'h0;
+      shift     <= 8'h0;
       sdiv      <= 2'd0;
       busy      <= 1'b0;
       bitno     <= 4'd0;
@@ -49,11 +49,11 @@ module spi_tft (
 
       if (busy) begin
         case (sdiv)
-          2'd0: begin tft_sclk <= 1'b0; tft_sdi <= shift[9]; sdiv <= 2'd1; end
+          2'd0: begin tft_sclk <= 1'b0; tft_sdi <= shift[7]; sdiv <= 2'd1; end
           2'd1: begin sdiv <= 2'd2; end
           2'd2: begin
              tft_sclk <= 1'b1;
-             shift    <= {shift[8:0], 1'b0};
+             shift    <= {shift[6:0], 1'b0};
              sdiv     <= 2'd3;
           end
           default: begin
@@ -68,7 +68,7 @@ module spi_tft (
       end else begin
         tft_sclk <= 1'b0;
         if (cwe && (addr[3:0] == 4'h4)) begin
-          shift <= {2'b00, wdata[7:0]};   // 2 idle bits then 8 data bits
+          shift <= wdata[7:0];   // 2 idle bits then 8 data bits
           bitno <= 4'd0;
           sdiv  <= 2'd0;
           busy  <= 1'b1;

@@ -120,7 +120,7 @@ reg rd_d;
     #20 rst_n = 1;
     rdword(0,   32'hFACED00D);
     rdword(4,   32'hFACED00E);
-    rdword(64,  32'hFACED011);
+    rdword(64,  32'hFACED01D);
     rdword(12,  32'hFACED010);
     if (errs == 0) $display("QSPI UNIT TEST: PASS");
     else $display("QSPI UNIT TEST: FAIL (%0d)", errs);

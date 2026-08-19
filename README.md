@@ -10,8 +10,8 @@ exercise (no physical fab submission assumed).
 |---|---|---|
 | 0 Architecture & budget | ✅ | `docs/PHASE0_ARCHITECTURE.md`, `reports/PHASE0_STATUS.md` |
 | 1 RV32IM core + M + TBs | ✅ | `rtl/rv32/*.v`, `tb/tb_rv32.v`, `tb/tb_muldiv.v`, `tests/smoke.S`, `reports/PHASE1_STATUS.md` |
-| 2 SoC integration | ⏳ | (next) |
-| 3 doomgeneric port | ⏳ | — |
+| 2 SoC integration | ✅ | `rtl/soc/*.v`, `rtl/periph/*.v`, bootloader+app (`tests/boot.S`,`app.S`), `tb/tb_soc.v`, `reports/PHASE2_STATUS.md` |
+| 3 doomgeneric port | ⏳ | (next) |
 | 4 FPGA bring-up | ⏳ | — |
 | 5 OpenLane 2 sign-off | ⏳ | — |
 | 6 Pad ring | ⏳ (Track-A gated) | — |
