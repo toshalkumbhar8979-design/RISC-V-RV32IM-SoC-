@@ -46,9 +46,9 @@ board and a TFT/PSRAM/flash bench. **There is no physical hardware attached to t
 No amount of synthesis proves runtime behaviour; I’ll only claim the FPGA gate after a real
 board has been run and FPS documented, as the brief mandates.
 
-## Concretestep order (this is the plan for when hardware/tooling is available)
+## Concrete step order (this is the plan for when hardware/tooling is available)
 1. Sync-BRAM sram wrap + core dmem-latency hook (describe above) → re-verify in simulation.
-2. Run runner.sh syn→pnr→bit, capture LUT/FF/fmaxy numbers.
+2. Run runner.sh syn→pnr→bit, capture LUT/FF/fmax numbers.
 3. Load to colorlight-i5 (or ULX3S-25F) via openFPGALoader; wire colour TFT + PSRAM/flash.
 4. Boot smoke → UART text → TFT pattern → Doom fps measurement; record numbers in this report.
 5. Only then Phase 5 (OpenLane 2 signoff) begins.
