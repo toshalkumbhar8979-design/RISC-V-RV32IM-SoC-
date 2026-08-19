@@ -4,3 +4,5 @@ sim/*.vcd
 sim/smoke_pc.trace
 tests/smoke.hex
 .tmp/*.vcd
+sim/bootrom.hex
+sim/app_flash.hex
