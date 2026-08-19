@@ -14,9 +14,9 @@ module tb_tft;
     .tft_rst_n(rst), .tft_dc(dc), .tft_cs_n(csn),
     .tft_sclk(sck), .tft_sdi(sdi));
 
-  reg  sckd;
-  reg  [7:0] bt;
-  reg  [2:0] bitn;
+  reg  sckd = 0;
+  reg  [7:0] bt = 8'h00;
+  reg  [2:0] bitn = 3'd0;
   integer bytes = 0;
 
   always @(posedge clk) begin

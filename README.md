@@ -38,8 +38,10 @@ exercise (no physical fab submission assumed).
 
 ```sh
 cd /mnt/c/Users/tosha/Downloads/RiscV
-make run            # assemble tests/smoke.S -> .hex -> iverilog -> vvp
+make run            # (from root: delegates) Phase-1 core smoke  -> RESULT: PASS
 make -C sim waves   # GTKWave on sim/smoke.vcd
+make -C sim soc     # Phase-2 SoC end-to-end                    -> SOC TEST: PASS
+make -C sim qspi    # QSPI engine unit test                     -> QSPI UNIT TEST: PASS
 ```
 
 Expected output:
