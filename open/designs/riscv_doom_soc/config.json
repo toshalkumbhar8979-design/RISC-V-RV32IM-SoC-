@@ -1,0 +1,20 @@
+{
+  "name": "riscv_doom_soc",
+  "version": "1.0",
+  "design": {
+    "top": "riscv_soc",
+    "synthesis": { "strategy": "AREA 0" },
+    "floorplan": {
+      "core_util": 0.5,
+      "die": { "width": 600, "height": 400 },
+      "pins": { "order": "alphabetical" }
+    },
+    "place": { "density": 0.55 },
+    "cts": { "buffer_gate": "sky130_fd_sc_hd__buf_2" },
+    "global_routing": { "mode": "default" },
+    "detailed_routing": { "mode": "default" },
+    "setup": { "sta": { "clock_period_ns": 20.0 } },
+    "hold":  { "sta": { "clock_period_ns": 20.0 } }
+  },
+  "platform": { "scl": "sky130_fd_sc_hd" }
+}

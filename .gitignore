@@ -8,3 +8,5 @@ sim/bootrom.hex
 sim/app_flash.hex
 sw/doomgeneric/
 fpga/ecp5/build/
+open/*.log
+open/designs/*/runs/
