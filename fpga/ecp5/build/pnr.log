@@ -1,0 +1,3 @@
+Warning: Use of default value for --package is deprecated. Please add '--package CABGA381' to arguments.
+ERROR: Failed to open JSON file 'riscv.json'.
+1 warning, 1 error

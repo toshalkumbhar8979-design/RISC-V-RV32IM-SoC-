@@ -1,0 +1,14 @@
+#====================================================================
+# riscv_doom_soc.lpf — ECP5 design constraints (nextpnr-ecp5).
+#
+# NOTE: physical pin assignment is intentionally LEFT OPEN (no LOC).
+# A real pin map depends on the carrier (Colorlight-i5 goldfingers,
+# ULX3S BTN/led, or a breadboard adapter) and will be filled in when
+# the board is on the bench. nextpnr auto-anchors unassigned IOs.
+#====================================================================
+
+# Timing: system clock is 25 MHz from the board oscillator. PLL is not
+# used for this bring-up build; the async-reset SoC runs at 25 MHz.
+CLOCK FREQUENCY: 33.000000 MHz;
+
+# (Standard trellis LPF accepts the directive above for -freq analysis)

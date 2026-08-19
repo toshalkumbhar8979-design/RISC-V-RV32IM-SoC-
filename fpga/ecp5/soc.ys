@@ -1,0 +1,3 @@
+# yosys script: riscv_doom_soc -> ECP5 (run from the WSL build dir)
+read_verilog -I rtl/rv32 rtl/rv32/rv32_core.v rtl/rv32/rv32_decoder.v rtl/rv32/rv32_alu.v rtl/rv32/rv32_regfile.v rtl/rv32/rv32_immgen.v rtl/rv32/rv32_muldiv.v rtl/rv32/rv32_csr.v rtl/soc/sram_wrap.v rtl/soc/bootrom.v rtl/soc/riscv_soc.v rtl/periph/qspi_ctrl.v rtl/periph/spi_tft.v rtl/periph/uart_lite.v rtl/periph/timer.v fpga_src/top_riscv_ecp5.v
+synth_ecp5 -top top_riscv_ecp5 -json riscv.json
