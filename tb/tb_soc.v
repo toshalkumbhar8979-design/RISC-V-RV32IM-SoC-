@@ -148,7 +148,7 @@ module tb_soc;
     rst_n = 0;
     #20 rst_n = 1;
 
-    #800000;                     // 800 us budget
+    #4000000;                    // 4 ms (boot copies 512 words)
 
     $display("==============================================");
     // 1) copy fidelity (first 64 words)
@@ -178,6 +178,7 @@ module tb_soc;
       $display("DISPLAY pattern: MISMATCH (dc bytes captured=%0d)", dcount);
 
     // 3) PASS mailbox (proves the timer IRQ was handled by the app)
+$display("PCEND=%08h", dut.u_core.ins_pc);
     mb = dut.u_sram.mem[125];
     if (mb == 32'h600D_F00D)
       $display("TIMER IRQ + mailbox: OK (0x600DF00D)");

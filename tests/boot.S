@@ -25,7 +25,7 @@ _start:
         addi    t0, t0, 4
         addi    t1, t1, 4
         addi    t2, t2, 1
-        li      t4, 128
+        li      t4, 512
         blt     t2, t4, 1b
         # UART 'J' and jump
         lui     a0, 0x40020
