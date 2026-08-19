@@ -7,9 +7,22 @@ def load_toc(path):
     with open(path, 'rb') as f:
         data = f.read()
     txt = data.decode('latin-1', errors='replace')
-    # scope dump
-    for m in re.finditer(r'\$var\s+\w+\s+\d+\s+(\S+)\s+([^\s]+)(?:\s+\[[^\]]+\])?\s+\$end', txt):
-        toc[m.group(1)] = m.group(2)
+    scope_path = []
+    for line in txt.splitlines():
+        if line.startswith('$scope'):
+            parts = line.split()
+            if len(parts) >= 3:
+                scope_path.append(parts[2])
+        elif line.startswith('$upscope'):
+            if scope_path:
+                scope_path.pop()
+        elif line.startswith('$var'):
+            m = re.match(r'\$var\s+\w+\s+\d+\s+(\S+)\s+([^\s]+)(?:\s+\[[^\]]+\])?\s+\$end', line)
+            if m:
+                nm = '.'.join(scope_path + [m.group(2)]) if scope_path else m.group(2)
+                toc[m.group(1)] = nm
+        elif line.startswith('$end'):
+            pass
     return txt, toc
 
 def dump(txt, toc, signals, t0=0, t1=1e18):
