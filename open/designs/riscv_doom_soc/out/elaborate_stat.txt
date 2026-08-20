@@ -1,0 +1,435 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.65 (git sha1 b85cad634782fafac275e5f540c056bfacb2b5d2)
+
+-- Running command `read_verilog -I src/rtl/rv32 src/riscv_doom_soc.v src/rtl/rv32/rv32_alu.v src/rtl/rv32/rv32_csr.v src/rtl/rv32/rv32_decoder.v src/rtl/rv32/rv32_immgen.v src/rtl/rv32/rv32_muldiv.v src/rtl/rv32/rv32_regfile.v src/rtl/rv32/rv32_core.v src/rtl/soc/bootrom.v src/rtl/soc/riscv_soc.v src/rtl/soc/sram_wrap.v src/rtl/periph/qspi_ctrl.v src/rtl/periph/spi_tft.v src/rtl/periph/timer.v src/rtl/periph/uart_lite.v; stat -top riscv_doom_soc' --
+
+1. Executing Verilog-2005 frontend: src/riscv_doom_soc.v
+Parsing Verilog input from `src/riscv_doom_soc.v' to AST representation.
+Generating RTLIL representation for module `\riscv_doom_soc'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: src/rtl/rv32/rv32_alu.v
+Parsing Verilog input from `src/rtl/rv32/rv32_alu.v' to AST representation.
+Generating RTLIL representation for module `\rv32_alu'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: src/rtl/rv32/rv32_csr.v
+Parsing Verilog input from `src/rtl/rv32/rv32_csr.v' to AST representation.
+Generating RTLIL representation for module `\rv32_csr'.
+Successfully finished Verilog frontend.
+
+4. Executing Verilog-2005 frontend: src/rtl/rv32/rv32_decoder.v
+Parsing Verilog input from `src/rtl/rv32/rv32_decoder.v' to AST representation.
+Generating RTLIL representation for module `\rv32_decoder'.
+Successfully finished Verilog frontend.
+
+5. Executing Verilog-2005 frontend: src/rtl/rv32/rv32_immgen.v
+Parsing Verilog input from `src/rtl/rv32/rv32_immgen.v' to AST representation.
+Generating RTLIL representation for module `\rv32_immgen'.
+Successfully finished Verilog frontend.
+
+6. Executing Verilog-2005 frontend: src/rtl/rv32/rv32_muldiv.v
+Parsing Verilog input from `src/rtl/rv32/rv32_muldiv.v' to AST representation.
+Generating RTLIL representation for module `\rv32_muldiv'.
+Successfully finished Verilog frontend.
+
+7. Executing Verilog-2005 frontend: src/rtl/rv32/rv32_regfile.v
+Parsing Verilog input from `src/rtl/rv32/rv32_regfile.v' to AST representation.
+Generating RTLIL representation for module `\rv32_regfile'.
+Warning: Replacing memory \mem with list of registers. See src/rtl/rv32/rv32_regfile.v:27
+Successfully finished Verilog frontend.
+
+8. Executing Verilog-2005 frontend: src/rtl/rv32/rv32_core.v
+Parsing Verilog input from `src/rtl/rv32/rv32_core.v' to AST representation.
+Generating RTLIL representation for module `\rv32_core'.
+Successfully finished Verilog frontend.
+
+9. Executing Verilog-2005 frontend: src/rtl/soc/bootrom.v
+Parsing Verilog input from `src/rtl/soc/bootrom.v' to AST representation.
+Generating RTLIL representation for module `\bootrom'.
+Successfully finished Verilog frontend.
+
+10. Executing Verilog-2005 frontend: src/rtl/soc/riscv_soc.v
+Parsing Verilog input from `src/rtl/soc/riscv_soc.v' to AST representation.
+Generating RTLIL representation for module `\riscv_soc'.
+Successfully finished Verilog frontend.
+
+11. Executing Verilog-2005 frontend: src/rtl/soc/sram_wrap.v
+Parsing Verilog input from `src/rtl/soc/sram_wrap.v' to AST representation.
+Generating RTLIL representation for module `\sram_wrap'.
+Successfully finished Verilog frontend.
+
+12. Executing Verilog-2005 frontend: src/rtl/periph/qspi_ctrl.v
+Parsing Verilog input from `src/rtl/periph/qspi_ctrl.v' to AST representation.
+Generating RTLIL representation for module `\qspi_ctrl'.
+Successfully finished Verilog frontend.
+
+13. Executing Verilog-2005 frontend: src/rtl/periph/spi_tft.v
+Parsing Verilog input from `src/rtl/periph/spi_tft.v' to AST representation.
+Generating RTLIL representation for module `\spi_tft'.
+Successfully finished Verilog frontend.
+
+14. Executing Verilog-2005 frontend: src/rtl/periph/timer.v
+Parsing Verilog input from `src/rtl/periph/timer.v' to AST representation.
+Generating RTLIL representation for module `\rv32_timer_periph'.
+Successfully finished Verilog frontend.
+
+15. Executing Verilog-2005 frontend: src/rtl/periph/uart_lite.v
+Parsing Verilog input from `src/rtl/periph/uart_lite.v' to AST representation.
+Generating RTLIL representation for module `\uart_lite'.
+Successfully finished Verilog frontend.
+
+16. Printing statistics.
+
+=== uart_lite ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       38 wires
+      377 wire bits
+       14 public wires
+      123 public wire bits
+        8 ports
+       73 port bits
+        2 processes
+       16 cells
+        4   $add
+        7   $eq
+        2   $logic_and
+        1   $logic_not
+        1   $mux
+        1   $not
+
+=== rv32_timer_periph ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       26 wires
+      552 wire bits
+       13 public wires
+      243 public wire bits
+        8 ports
+       74 port bits
+        2 processes
+        6 cells
+        2   $add
+        1   $ge
+        1   $logic_and
+        1   $logic_not
+        1   $reduce_and
+
+=== spi_tft ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       36 wires
+      216 wire bits
+       16 public wires
+       92 public wire bits
+       12 ports
+       77 port bits
+        2 processes
+        9 cells
+        1   $add
+        4   $eq
+        3   $logic_and
+        1   $logic_not
+
+=== qspi_ctrl ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       54 wires
+      310 wire bits
+       24 public wires
+      177 public wire bits
+       13 ports
+       79 port bits
+        1 processes
+       14 cells
+        6   $add
+        4   $eq
+        1   $logic_and
+        3   $logic_not
+
+=== sram_wrap ===
+
+        +----------Local Count, excluding submodules.
+        | 
+    65597 wires
+  2098691 wire bits
+       10 public wires
+      179 public wire bits
+        9 ports
+      147 port bits
+        1 memories
+  1048576 memory bits
+        2 processes
+    32770 cells
+    32768   $meminit_v2
+        2   $memrd
+
+=== riscv_soc ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       88 wires
+      784 wire bits
+       43 public wires
+      449 public wire bits
+       12 ports
+       12 port bits
+       45 cells
+       10   $eq
+       18   $logic_and
+        4   $logic_not
+       10   $mux
+        3   $sub
+        8 submodules
+        2   bootrom
+        1   qspi_ctrl
+        1   rv32_core
+        1   rv32_timer_periph
+        1   spi_tft
+        1   sram_wrap
+        1   uart_lite
+
+=== bootrom ===
+
+        +----------Local Count, excluding submodules.
+        | 
+        3 wires
+       72 wire bits
+        2 public wires
+       40 public wire bits
+        2 ports
+       40 port bits
+        1 memories
+     8192 memory bits
+        1 processes
+        2 cells
+        1   $meminit_v2
+        1   $memrd
+
+=== rv32_core ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      231 wires
+     2372 wire bits
+       91 public wires
+     1037 public wire bits
+       16 ports
+      174 port bits
+        1 processes
+      136 cells
+        4   $add
+        2   $and
+       20   $eq
+       27   $logic_and
+       18   $logic_not
+       20   $logic_or
+       39   $mux
+        2   $ne
+        1   $not
+        1   $or
+        2   $shl
+        6 submodules
+        1   rv32_alu
+        1   rv32_csr
+        1   rv32_decoder
+        1   rv32_immgen
+        1   rv32_muldiv
+        1   rv32_regfile
+
+=== rv32_regfile ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       99 wires
+     2677 wire bits
+       42 public wires
+     1170 public wire bits
+        9 ports
+      114 port bits
+        3 processes
+        7 cells
+        2   $eq
+        1   $logic_and
+        1   $logic_not
+        2   $mux
+        1   $ne
+
+=== rv32_muldiv ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      131 wires
+     2767 wire bits
+       33 public wires
+      635 public wire bits
+        9 ports
+      104 port bits
+        1 processes
+       65 cells
+        8   $add
+        1   $and
+       15   $eq
+        1   $ge
+        4   $logic_and
+        1   $logic_not
+        8   $logic_or
+        8   $mux
+        2   $neg
+        7   $not
+        1   $or
+        2   $shift
+        1   $shiftx
+        2   $shl
+        2   $sub
+        2   $xor
+
+=== rv32_immgen ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       10 wires
+      320 wire bits
+        8 public wires
+      256 public wire bits
+        2 ports
+       64 port bits
+        1 processes
+
+=== rv32_decoder ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      158 wires
+      296 wire bits
+       27 public wires
+       91 public wire bits
+       23 ports
+       62 port bits
+        1 processes
+       19 cells
+       19   $eq
+
+=== rv32_csr ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       26 wires
+      564 wire bits
+       19 public wires
+      371 public wire bits
+       14 ports
+      211 port bits
+        2 processes
+        1 cells
+        1   $logic_not
+
+=== rv32_alu ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       24 wires
+      554 wire bits
+        9 public wires
+      167 public wire bits
+        7 ports
+      103 port bits
+        1 processes
+       13 cells
+        1   $add
+        1   $and
+        1   $eq
+        2   $lt
+        2   $mux
+        1   $or
+        1   $shl
+        1   $shr
+        1   $sshr
+        1   $sub
+        1   $xor
+
+=== riscv_doom_soc ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       12 wires
+       12 wire bits
+       12 public wires
+       12 public wire bits
+       12 ports
+       12 port bits
+        1 submodules
+        1   riscv_soc
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+    33105 riscv_doom_soc
+       45 riscv_soc
+        2   bootrom
+       14   qspi_ctrl
+      136   rv32_core
+       13     rv32_alu
+        1     rv32_csr
+       19     rv32_decoder
+       65     rv32_muldiv
+        7     rv32_regfile
+        6   rv32_timer_periph
+        9   spi_tft
+    32770   sram_wrap
+       16   uart_lite
+
+        +----------Count including submodules.
+        | 
+    66536 wires
+  2110636 wire bits
+      365 public wires
+     5082 public wire bits
+      158 ports
+     1386 port bits
+        3 memories
+  1064960 memory bits
+       21 processes
+    33105 cells
+       26   $add
+        4   $and
+       82   $eq
+        2   $ge
+       57   $logic_and
+       31   $logic_not
+       28   $logic_or
+        2   $lt
+    32770   $meminit_v2
+        4   $memrd
+       62   $mux
+        3   $ne
+        2   $neg
+        9   $not
+        3   $or
+        1   $reduce_and
+        2   $shift
+        1   $shiftx
+        5   $shl
+        1   $shr
+        1   $sshr
+        6   $sub
+        3   $xor
+        1 submodules
+        1   riscv_soc
+
+Warnings: 1 unique messages, 1 total
+End of script. Logfile hash: a98a30d9d4, time: 247.21s, user: 244.92s, system: 1.66s, MEM: 792.23 MB peak
+Yosys 0.65 (git sha1 b85cad634782fafac275e5f540c056bfacb2b5d2)
+Time spent: 99% 16x read_verilog (246 sec), 0% 1x stat (0 sec), ...
+PROBE_DONE rc=0

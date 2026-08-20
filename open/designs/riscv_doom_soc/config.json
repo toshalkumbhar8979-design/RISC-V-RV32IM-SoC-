@@ -1,20 +1,22 @@
 {
-  "name": "riscv_doom_soc",
-  "version": "1.0",
-  "design": {
-    "top": "riscv_soc",
-    "synthesis": { "strategy": "AREA 0" },
-    "floorplan": {
-      "core_util": 0.5,
-      "die": { "width": 600, "height": 400 },
-      "pins": { "order": "alphabetical" }
-    },
-    "place": { "density": 0.55 },
-    "cts": { "buffer_gate": "sky130_fd_sc_hd__buf_2" },
-    "global_routing": { "mode": "default" },
-    "detailed_routing": { "mode": "default" },
-    "setup": { "sta": { "clock_period_ns": 20.0 } },
-    "hold":  { "sta": { "clock_period_ns": 20.0 } }
-  },
-  "platform": { "scl": "sky130_fd_sc_hd" }
+  "DESIGN_NAME": "riscv_doom_soc",
+  "VERILOG_FILES": [
+    "dir::src/riscv_doom_soc.v",
+    "dir::src/rtl/rv32/rv32_alu.v",
+    "dir::src/rtl/rv32/rv32_csr.v",
+    "dir::src/rtl/rv32/rv32_decoder.v",
+    "dir::src/rtl/rv32/rv32_immgen.v",
+    "dir::src/rtl/rv32/rv32_muldiv.v",
+    "dir::src/rtl/rv32/rv32_regfile.v",
+    "dir::src/rtl/rv32/rv32_core.v",
+    "dir::src/rtl/soc/bootrom.v",
+    "dir::src/rtl/soc/riscv_soc.v",
+    "dir::src/rtl/soc/sram_wrap.v",
+    "dir::src/rtl/periph/qspi_ctrl.v",
+    "dir::src/rtl/periph/spi_tft.v",
+    "dir::src/rtl/periph/timer.v",
+    "dir::src/rtl/periph/uart_lite.v"
+  ],
+  "CLOCK_PERIOD": 20,
+  "CLOCK_PORT": "clk"
 }

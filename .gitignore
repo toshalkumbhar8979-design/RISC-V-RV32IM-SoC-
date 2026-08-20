@@ -10,3 +10,5 @@ sw/doomgeneric/
 fpga/ecp5/build/
 open/*.log
 open/designs/*/runs/
+open/designs/*/probe.log
+open/designs/*/yosys.log
