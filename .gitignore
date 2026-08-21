@@ -88,6 +88,11 @@ open/stage_small_design.sh
 open/verify_final.py
 open/verify_pdf.py
 
+# ---------------- PRIVATE FILE — NEVER PUSH TO GITHUB ----------------
+INTERVIEW_PREP_QA.pdf
+make_interview_guide.py
+check_qa.py
+
 # ---------------- OS / editor ----------------
 .DS_Store
 Thumbs.db
