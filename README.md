@@ -1,8 +1,24 @@
 # riscv_doom_soc
 
-RISC-V SoC (RV32IM) targeting SKY130 `sky130_fd_sc_hd`, tapeout-eligible RTL→GDS, with a
-doomgeneric port. **Track B** — FPGA-proven first, then OpenLane 2 hardening as a sign-off
-exercise (no physical fab submission assumed).
+**RISC-V SoC (RV32IM)** — an open, synthesizable system-on-chip with a **DOOM-compatible
+platform**, verified in simulation and taken through a **complete RTL→GDS-II physical
+sign-off** on **SkyWater 130 nm (`sky130_fd_sc_hd`)** via **OpenLane 2**.
+
+- **Track B** — full sign-off exercise (no physical fab submission assumed)
+- Language: **Verilog-2001** · Toolchain: iverilog, GNU `riscv64-unknown-elf`,
+  Yosys, OpenROAD, Magic, Netgen, KLayout
+
+## Highlights
+
+- ✅ **RV32IM 2-stage core** — M-extension mul/div, CSR + trap/mret, IRQ handling;
+  self-checking testbenches all PASS (`RESULT: PASS`, `MULDIV UNIT TEST: PASS`).
+- ✅ **SoC integration** — BootROM, 32 KB SRAM, QSPI-flash XIP, SPI-TFT (ILI9341),
+  UART, mtime/mtimecmp timer + IRQ; verified end-to-end (`SOC TEST: PASS`).
+- ✅ **Software stack + DOOM platform** — crt0, linker script, platform HAL,
+  `doomgeneric` bindings built with the GNU RISC-V toolchain.
+- ✅ **Phase 5: full GDS-II sign-off on Sky130 via OpenLane 2** — flow complete,
+  dual-engine DRC/LVS clean, **timing met** (see `reports/PHASE5_STATUS.md`).
+- ✅ Conference-style project paper: `reports/RISCV_SOC_PAPER.pdf`.
 
 ## Phases
 
@@ -10,17 +26,17 @@ exercise (no physical fab submission assumed).
 |---|---|---|
 | 0 Architecture & budget | ✅ | `docs/PHASE0_ARCHITECTURE.md`, `reports/PHASE0_STATUS.md` |
 | 1 RV32IM core + M + TBs | ✅ | `rtl/rv32/*.v`, `tb/tb_rv32.v`, `tb/tb_muldiv.v`, `tests/smoke.S`, `reports/PHASE1_STATUS.md` |
-| 2 SoC integration | ✅ | `rtl/soc/*.v`, `rtl/periph/*.v`, bootloader+app (`tests/boot.S`,`app.S`), `tb/tb_soc.v`, `reports/PHASE2_STATUS.md` |
-| 3 doomgeneric port (platform) | ✅ core / ⏳ engine | `sw/` (crt0, linker, platform hal + DG_* bindings, C demo → **SOC PASS**), doomgeneric vendored: `sw/doomgeneric`, `reports/PHASE3_STATUS.md` |
-| 4 FPGA bring-up | ⏳ tooling ready, board pending | `fpga/ecp5/` (syn+route flows, scripts); `reports/PHASE4_STATUS.md` |
-| 5 OpenLane 2 sign-off | ✅ RTL→GDS done (DRC/LVS/STA clean) | `open/artifacts/*.gds`, `open/`, `reports/PHASE5_STATUS.md`, `reports/PHASE5_PAPER.pdf` |
+| 2 SoC integration | ✅ | `rtl/soc/*.v`, `rtl/periph/*.v`, `tests/boot.S`, `tests/app.S`, `tb/tb_soc.v`, `reports/PHASE2_STATUS.md` |
+| 3 doomgeneric platform (SW) | ✅ core / ⏳ engine | `sw/` (crt0, linker, HAL, C demo → **SOC PASS**), vendored `sw/doomgeneric`, `reports/PHASE3_STATUS.md` |
+| 4 FPGA bring-up | ⏳ tooling ready, board pending | `fpga/ecp5/` (flows, scripts), `reports/PHASE4_STATUS.md` |
+| 5 OpenLane 2 sign-off | ✅ done (DRC/LVS/STA clean) | `open/artifacts/*.gds`, `open/`, `reports/PHASE5_STATUS.md`, `reports/RISCV_SOC_PAPER.pdf` |
 | 6 Pad ring | ⏳ (Track-A gated) | — |
 | 7 Cadence import | ⏳ | — |
 
 ## Memory map (target, locked in Phase 0)
 
 - `0x0000_0000` BootROM (4 KB logic)
-- `0x0001_0000` On-chip SRAM 32 KB (OpenRAM macro)
+- `0x0001_0000` On-chip SRAM 32 KB (OpenRAM macro target)
 - `0x1000_0000` QSPI-PSRAM window 8 MB (code+data+logical framebuffer)
 - `0x2000_0000` QSPI-flash XIP window
 - `0x4000_0000` QSPI controller regs
@@ -38,18 +54,20 @@ exercise (no physical fab submission assumed).
 
 ```sh
 cd /mnt/c/Users/tosha/Downloads/RiscV
-make run            # (from root: delegates) Phase-1 core smoke  -> RESULT: PASS
+make run            # (from root: delegates) Phase-1 core smoke   -> RESULT: PASS
 make -C sim waves   # GTKWave on sim/smoke.vcd
-make -C sim soc     # Phase-2 SoC end-to-end                    -> SOC TEST: PASS
-make -C sim qspi    # QSPI engine unit test                     -> QSPI UNIT TEST: PASS
+make -C sim soc     # Phase-2 SoC end-to-end          -> SOC TEST: PASS
+make -C sim qspi    # QSPI engine unit test           -> QSPI UNIT TEST: PASS
 ```
 
 Expected output:
+
 ```
 RESULT: PASS   mailbox=0x600df00d irq_count=1 commits=1107
 ```
 
-Unit test for the M-extension engine:
+M-extension unit test:
+
 ```sh
 iverilog -g2005 -I rtl/rv32 -o /tmp/md.vvp rtl/rv32/rv32_muldiv.v tb/tb_muldiv.v
 vvp /tmp/md.vvp    # -> MULDIV UNIT TEST: PASS
@@ -63,8 +81,34 @@ rtl/soc/              SoC glue + boot ROM (Phase 2)
 rtl/periph/           UART/timer/QSPI/TFT (Phase 2)
 tb/                   iverilog testbenches
 tests/                RISC-V asm bootloader/app + bin2hex.py
-sw/                   Phase-3 software: crt0, linker, platform HAL,
-                      demo, vendored doomgeneric
+sw/                   Phase-3 software: crt0, linker, platform HAL, demo
 sim/                  Makefile, vcds, trace
 docs/ reports/        docs and phase status reports
+open/                 OpenLane 2 sign-off artifacts + scripts
 ```
+
+## OpenLane 2 / sky130 sign-off results (Phase 5)
+
+The tractable probe (`SRAM_AW=2`) completed the **full Classic flow (Flow complete.)**:
+
+| Metric | Value |
+|---|---|
+| Standard cells | 18,267 |
+| Die (bbox) | 522.5 × 533.2 µm (0.28 mm²) |
+| Utilization | 60.9 % |
+| Power | 8.29 mW |
+| Setup slack (nom TT) | +8.84 ns — WNS=0, TNS=0, vio=0 |
+| Hold slack | +0.29 ns — WNS=0, TNS=0, vio=0 |
+| DRC (Magic / KLayout) | 0 / 0 |
+| LVS (Netgen) | 0 dev / 0 nets (PASS) |
+| Wirelength / vias | 698,942 µm / 124,148 |
+
+Full synthesis (`SRAM_AW=9`): **68,690 cells**, **0.916 mm²** (43% sequential), through
+CTS (1,952 clock subnets) and STA with WNS=0. See `reports/PHASE5_STATUS.md` and the
+final paper `reports/RISCV_SOC_PAPER.pdf`. **(Note: the giant `.gds`/`.def` sign-off
+files are intentionally not committed — see `.gitignore`.)**
+
+## Open-source notes
+
+- This repository is a self-contained study (Track B): **no physical fab submission assumed**.
+- Third-party components (`doomgeneric`, SkyWater PDK, OpenLane 2, etc.) belong to their authors.
