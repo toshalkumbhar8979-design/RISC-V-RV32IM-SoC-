@@ -12,3 +12,6 @@ open/*.log
 open/designs/*/runs/
 open/designs/*/probe.log
 open/designs/*/yosys.log
+open/_v*.py
+open/artifacts/*.gds
+open/artifacts/*.def

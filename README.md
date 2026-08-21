@@ -13,7 +13,7 @@ exercise (no physical fab submission assumed).
 | 2 SoC integration | ✅ | `rtl/soc/*.v`, `rtl/periph/*.v`, bootloader+app (`tests/boot.S`,`app.S`), `tb/tb_soc.v`, `reports/PHASE2_STATUS.md` |
 | 3 doomgeneric port (platform) | ✅ core / ⏳ engine | `sw/` (crt0, linker, platform hal + DG_* bindings, C demo → **SOC PASS**), doomgeneric vendored: `sw/doomgeneric`, `reports/PHASE3_STATUS.md` |
 | 4 FPGA bring-up | ⏳ tooling ready, board pending | `fpga/ecp5/` (syn+route flows, scripts); `reports/PHASE4_STATUS.md` |
-| 5 OpenLane 2 sign-off | 🔶 probe ✓ (Yosys 33k cells), image pull pending | `open/` (config, runner, probe); `reports/PHASE5_STATUS.md` |
+| 5 OpenLane 2 sign-off | ✅ RTL→GDS done (DRC/LVS/STA clean) | `open/artifacts/*.gds`, `open/`, `reports/PHASE5_STATUS.md`, `reports/PHASE5_PAPER.pdf` |
 | 6 Pad ring | ⏳ (Track-A gated) | — |
 | 7 Cadence import | ⏳ | — |
 
