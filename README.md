@@ -137,8 +137,7 @@ The tractable probe (`SRAM_AW=2`) completed the **full Classic flow (Flow comple
 
 Full synthesis (`SRAM_AW=9`): **68,690 cells**, **0.916 mm²** (43% sequential), through
 CTS (1,952 clock subnets) and STA with WNS=0. See `reports/PHASE5_STATUS.md` and the
-final paper `reports/RISCV_SOC_PAPER.pdf`. **(Note: the giant `.gds`/`.def` sign-off
-files are intentionally not committed — see `.gitignore`.)**
+final paper `reports/RISC-V SoC.pdf`. 
 
 ## Open-source notes
 
