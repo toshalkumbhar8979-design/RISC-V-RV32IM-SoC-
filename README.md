@@ -18,7 +18,7 @@ sign-off** on **SkyWater 130 nm (`sky130_fd_sc_hd`)** via **OpenLane 2**.
   `doomgeneric` bindings built with the GNU RISC-V toolchain.
 - ✅ **Phase 5: full GDS-II sign-off on Sky130 via OpenLane 2** — flow complete,
   dual-engine DRC/LVS clean, **timing met** (see `reports/PHASE5_STATUS.md`).
-- ✅ Conference-style project paper: `reports/RISCV_SOC_PAPER.pdf`.
+- ✅ Conference-style project paper: `reports/RISC-V SoC.pdf`.
 
 ## Phases
 
