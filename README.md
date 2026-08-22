@@ -28,14 +28,15 @@ sign-off** on **SkyWater 130 nm (`sky130_fd_sc_hd`)** via **OpenLane 2**.
 > `docs/media/*.png`, then commit.
 
 ### GDS-II die view (whole chip, 522.5 × 533.2 µm)
+<img width="407" height="415" alt="image" src="https://github.com/user-attachments/assets/8606256c-0078-464e-9d10-0ec8d4922dc2" />
 
-![Die view - full chip](open/artifacts/layout_full.png)
 
 *Rendered by `open/gds2png.py` from the OpenLane 2 GDS-II stream-out.*
 
 ### GDS-II die view (zoomed core region)
 
-![Die view - zoom](open/artifacts/layout_zoom.png)
+<img width="485" height="375" alt="image" src="https://github.com/user-attachments/assets/3a915f79-1798-403f-82d8-ddb835830af4" />
+
 
 ### Waveforms (simulation, Icarus Verilog → GTKWave)
 
