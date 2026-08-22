@@ -24,10 +24,10 @@ open/designs/*/runs/
 open/designs/*/probe.log
 open/designs/*/yosys.log
 
-# Large binary sign-off artifacts — regenerate via open/gds2png.py / run_ol2*.sh
-open/artifacts/*.gds
-open/artifacts/*.def
-open/artifacts/layout.png
+# Large binary sign-off artifacts — kept in repo (RTL→GDS-II deliverables)
+# open/artifacts/*.gds
+# open/artifacts/*.def
+# open/artifacts/layout.png
 
 # ---------------- Debug / session helper scripts (local only) ----------------
 open/awake_check.sh
