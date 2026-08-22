@@ -20,6 +20,37 @@ sign-off** on **SkyWater 130 nm (`sky130_fd_sc_hd`)** via **OpenLane 2**.
   dual-engine DRC/LVS clean, **timing met** (see `reports/PHASE5_STATUS.md`).
 - ✅ Conference-style project paper: `reports/RISC-V SoC.pdf`.
 
+## Visuals (screenshots)
+
+> Drop your PNG screenshots into these paths, and they'll render here on GitHub.
+> The two die views (`open/artifacts/*`) are already committed; for the waveform
+> shots, export them from **GTKWave → File → Write 2bit PNG** (or screenshot), save as
+> `docs/media/*.png`, then commit.
+
+### GDS-II die view (whole chip, 522.5 × 533.2 µm)
+
+![Die view - full chip](open/artifacts/layout_full.png)
+
+*Rendered by `open/gds2png.py` from the OpenLane 2 GDS-II stream-out.*
+
+### GDS-II die view (zoomed core region)
+
+![Die view - zoom](open/artifacts/layout_zoom.png)
+
+### Waveforms (simulation, Icarus Verilog → GTKWave)
+
+| Waveform | Source run | Suggested file |
+|---|---|---|
+| Core smoke: PC trace + IRQ + mailbox | `make run` → `sim/smoke.vcd` | `docs/media/waveform_smoke.png` |
+| Full SoC boot: QSPI flash → SRAM → app/UART/TFT/IRQ | `make -C sim soc` → `sim/soc.vcd` | `docs/media/waveform_soc.png` |
+| M-extension: mul/div golden vectors | `tb/tb_muldiv.v` → `sim/muldiv.vcd` | `docs/media/waveform_muldiv.png` |
+
+![Waveform - SoC boot to app](docs/media/waveform_soc.png)
+
+![Waveform - core smoke/IRQ](docs/media/waveform_smoke.png)
+
+![Waveform - M-extension](docs/media/waveform_muldiv.png)
+
 ## Phases
 
 | Phase | Status | Deliverables |
