@@ -90,7 +90,9 @@ open/verify_pdf.py
 
 # ---------------- PRIVATE FILE — NEVER PUSH TO GITHUB ----------------
 INTERVIEW_PREP_QA.pdf
+PROJECT_SHEET.pdf
 make_interview_guide.py
+make_project_sheet.py
 check_qa.py
 
 # ---------------- OS / editor ----------------
