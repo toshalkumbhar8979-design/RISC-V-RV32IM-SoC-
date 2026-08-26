@@ -22,11 +22,6 @@ sign-off** on **SkyWater 130 nm (`sky130_fd_sc_hd`)** via **OpenLane 2**.
 
 ## Visuals (screenshots)
 
-> Drop your PNG screenshots into these paths, and they'll render here on GitHub.
-> The two die views (`open/artifacts/*`) are already committed; for the waveform
-> shots, export them from **GTKWave → File → Write 2bit PNG** (or screenshot), save as
-> `docs/media/*.png`, then commit.
-
 ### GDS-II die view (whole chip, 522.5 × 533.2 µm)
 <img width="407" height="415" alt="image" src="https://github.com/user-attachments/assets/8606256c-0078-464e-9d10-0ec8d4922dc2" />
 
