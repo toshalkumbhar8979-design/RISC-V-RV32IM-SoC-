@@ -88,6 +88,7 @@ open/stage_design.sh
 open/stage_small_design.sh
 open/verify_final.py
 open/verify_pdf.py
+open/launch_corner25.sh
 
 # ---------------- PRIVATE FILE — NEVER PUSH TO GITHUB ----------------
 INTERVIEW_PREP_QA.pdf

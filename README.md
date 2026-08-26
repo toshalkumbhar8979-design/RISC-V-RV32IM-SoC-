@@ -12,12 +12,18 @@ sign-off** on **SkyWater 130 nm (`sky130_fd_sc_hd`)** via **OpenLane 2**.
 
 - ✅ **RV32IM 2-stage core** — M-extension mul/div, CSR + trap/mret, IRQ handling;
   self-checking testbenches all PASS (`RESULT: PASS`, `MULDIV UNIT TEST: PASS`).
-- ✅ **SoC integration** — BootROM, 32 KB SRAM, QSPI-flash XIP, SPI-TFT (ILI9341),
-  UART, mtime/mtimecmp timer + IRQ; verified end-to-end (`SOC TEST: PASS`).
+- ✅ **SoC integration** — BootROM, 32 KB SRAM, QSPI-flash XIP, **PSRAM window**,
+  SPI-TFT (ILI9341) + **pixel-DMA**, UART, mtime/mtimecmp timer + IRQ; verified
+  end-to-end (`SOC TEST: PASS`, `QSPI UNIT TEST: PASS`, `TFT_DMA: OK`).
+- ✅ **FPGA-ready sync-BRAM** — `fpga/sram_dp_sync.v` + core `if_stall` (ECP5
+  EBR-inferable; default async path still PASS).
 - ✅ **Software stack + DOOM platform** — crt0, linker script, platform HAL,
   `doomgeneric` bindings built with the GNU RISC-V toolchain.
 - ✅ **Phase 5: full GDS-II sign-off on Sky130 via OpenLane 2** — flow complete,
-  dual-engine DRC/LVS clean, **timing met** (see `reports/PHASE5_STATUS.md`).
+  dual-engine DRC/LVS clean, **timing met** on nominal; **25 ns corner run closes
+  the slow corner to −0.07 ns** (see `reports/PHASE5_STATUS.md`).
+- 📄 Plans (gated): OpenRAM macro integration, pad ring, Cadence import, DOOM
+  glue — see `docs/`.
 - ✅ Conference-style project paper: `reports/RISC-V SoC.pdf`.
 
 ## Visuals (screenshots)
