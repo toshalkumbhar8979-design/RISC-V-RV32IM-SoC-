@@ -11,10 +11,12 @@ module tb_qspi;
   reg [31:0] a = 0; reg req = 0;
   wire [31:0] rd; wire rdy;
   wire cs, sclk, mosi, miso;
+  wire cs1;
 
   qspi_ctrl uq (.clk(clk), .rst_n(rst_n),
     .x_addr_i(a), .x_req_i(req), .x_rdata_o(rd), .x_rdy_o(rdy),
-    .x_busy_o(busyw), .q_cs_n(cs), .q_sclk(sclk), .q_mosi(mosi), .q_miso(miso),
+    .x_busy_o(busyw), .cs_sel(1'b0), .q_cs_n(cs), .q_cs1_n(cs1), 
+    .q_sclk(sclk), .q_mosi(mosi), .q_miso(miso),
     .dbg_rxbit_o(rxbit_db), .dbg_rxact_o(rxact_db));
 
   wire [4:0] rxbit_db;

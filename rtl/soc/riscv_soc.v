@@ -2,10 +2,11 @@
 // riscv_soc.v — Phase-2 minimal SoC: rv32_core + boot ROM + SRAM +
 // QSPI flash XIP + SPI-TFT + UART + mtime timer.
 //
-// Memory map:
+// Memory map (matches Phase-0 architecture):
 //   0x0000_0000  BootROM        (16 KB logic)
 //   0x0001_0000  SRAM           (32 KB)
-//   0x1000_0000  Flash XIP      (read-only, via qspi engine)
+//   0x1000_0000  PSRAM window   (8 MB, via qspi engine, CS1)
+//   0x2000_0000  QSPI flash XIP (read-only, via qspi engine, CS0)
 //   0x4001_0000  SPI-TFT ctrl
 //   0x4002_0000  UART
 //   0x4003_0000  Timer
@@ -20,8 +21,9 @@ module riscv_soc #(
   input  wire        rst_n,
   output wire        uart_txd,
   output wire        tft_rst_n, tft_dc, tft_cs_n, tft_sclk, tft_sdi,
-  output wire        f_cs_n,  f_sclk, f_mosi,
-  input  wire        f_miso
+  output wire        f_cs_n,  f_sclk, f_mosi,   // SPI flash (CS0)
+  input  wire        f_miso,
+  output wire        p_cs_n                    // PSRAM chip-select (CS1)
 );
 
   // ---------------- core -------------
@@ -55,7 +57,8 @@ module riscv_soc #(
   wire sram_sel_i = (imem_addr[31:16] == 16'h0001);
   wire rom_sel_d  = (dmem_addr[31:16] == 16'h0000) && (dmem_addr[15:14] == 2'b00);
   wire sram_sel_d = (dmem_addr[31:16] == 16'h0001);
-  wire flash_sel  = (dmem_addr[31:24] == 8'h10);
+  wire psram_sel  = (dmem_addr[31:24] == 8'h10);   // 0x1000_0000 PSRAM window
+  wire flash_sel  = (dmem_addr[31:24] == 8'h20);   // 0x2000_0000 flash XIP
   wire tft_sel    = (dmem_addr[31:16] == 16'h4001);
   wire uart_sel   = (dmem_addr[31:16] == 16'h4002);
   wire timer_sel  = (dmem_addr[31:16] == 16'h4003);
@@ -95,7 +98,7 @@ module riscv_soc #(
       end
       assign imem_grant_int = (sram_sel_i) ? imem_sram_grant_d : 1'b1;
       assign dmem_grant_int = (sram_sel_d && !dmem_we) ? dmem_sram_grant_d :
-                              ((flash_sel) ? (dmem_we ? 1'b1 : qspi_rdy) : 1'b1);
+                              ((flash_sel || psram_sel) ? (dmem_we ? 1'b1 : qspi_rdy) : 1'b1);
     end else begin : g_u_sram
       sram_wrap #(.AW(SRAM_AW)) u_sram (
         .clk     (clk),
@@ -105,25 +108,27 @@ module riscv_soc #(
         .w_addr  (dmem_addr[14:2] - 15'h4000), .w_strb(dmem_wstrb), .w_data(dmem_wdata)
       );
       assign imem_grant_int = 1'b1;              // combinational reads always ready
-      assign dmem_grant_int = (flash_sel ? (dmem_we ? 1'b1 : qspi_rdy) : 1'b1);
+      assign dmem_grant_int = ((flash_sel || psram_sel) ? (dmem_we ? 1'b1 : qspi_rdy) : 1'b1);
     end
   endgenerate
 
   assign imem_grant = imem_grant_int;
   assign dmem_grant = dmem_grant_int;
 
-  // ---------------- QSPI flash XIP -------------
+  // ---------------- QSPI flash/PSRAM shared engine -------------
   wire [31:0]  qspi_rdata;
   wire         qspi_rdy, qspi_busy;
   qspi_ctrl u_qspi (
     .clk      (clk),
     .rst_n    (rst_n),
     .x_addr_i ({8'h0, dmem_addr[23:0]}),
-    .x_req_i  (dmem_valid && flash_sel && !dmem_we),
+    .x_req_i  (dmem_valid && (flash_sel || psram_sel) && !dmem_we),
     .x_rdata_o(qspi_rdata),
     .x_rdy_o  (qspi_rdy),
     .x_busy_o (qspi_busy),
+    .cs_sel   (psram_sel),          // 0=flash(CS0), 1=PSRAM(CS1)
     .q_cs_n   (f_cs_n),
+    .q_cs1_n  (p_cs_n),
     .q_sclk   (f_sclk),
     .q_mosi   (f_mosi),
     .q_miso   (f_miso)
@@ -168,6 +173,7 @@ module riscv_soc #(
   assign dmem_rdata =
               rom_sel_d  ? rom_d_data :
               sram_sel_d ? sram_d     :
+              psram_sel  ? qspi_rdata :
               flash_sel  ? qspi_rdata :
               tft_sel    ? tft_rdata  :
               uart_sel   ? uart_rdata :

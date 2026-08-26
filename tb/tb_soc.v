@@ -21,6 +21,7 @@ module tb_soc;
   wire tft_rst_n, tft_dc, tft_cs_n, tft_sclk, tft_sdi;
   wire f_cs_n, f_sclk, f_mosi;
   wire f_miso;
+  wire p_cs_n;                     // PSRAM CS (CS1) — unused in this TB
 
   `ifdef SOC_SYNC_SRAM
   localparam DO_SYNC = 1;
@@ -36,7 +37,8 @@ module tb_soc;
     .tft_rst_n(tft_rst_n), .tft_dc(tft_dc), .tft_cs_n(tft_cs_n),
     .tft_sclk(tft_sclk), .tft_sdi(tft_sdi),
     .f_cs_n(f_cs_n), .f_sclk(f_sclk), .f_mosi(f_mosi),
-    .f_miso(f_miso)
+    .f_miso(f_miso),
+    .p_cs_n(p_cs_n)
   );
 
   // ================== SPI-flash behavioral model ==================

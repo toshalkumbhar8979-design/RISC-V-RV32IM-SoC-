@@ -16,6 +16,9 @@ module qspi_ctrl (
   output reg         q_sclk,
   output reg         q_mosi,
   input  wire        q_miso,
+  // shared-bus chip-select select: 0 = flash (q_cs_n), 1 = PSRAM (q_cs1_n)
+  input  wire        cs_sel,
+  output reg         q_cs1_n,
   // test hooks for behavioral models
   output wire [4:0]  dbg_rxbit_o,
   output wire        dbg_rxact_o
@@ -44,12 +47,12 @@ module qspi_ctrl (
       laddr <= 32'h0; txb <= 8'h0; rxb <= 8'h0; rxseq <= 32'h0;
       done  <= 1'b0; rxbit <= 5'd0; rxact <= 1'b0;
       x_rdy_o <= 1'b0; x_busy_o <= 1'b0;
-      q_cs_n <= 1'b1; q_sclk <= 1'b0; q_mosi <= 1'b1;
+      q_cs_n <= 1'b1; q_cs1_n <= 1'b1; q_sclk <= 1'b0; q_mosi <= 1'b1;
     end else begin
       x_rdy_o <= 1'b0;
       case (st)
         ST_IDLE: begin
-          q_cs_n <= 1'b1; q_sclk <= 1'b0; q_mosi <= 1'b1;
+          q_cs_n <= 1'b1; q_cs1_n <= 1'b1; q_sclk <= 1'b0; q_mosi <= 1'b1;
           x_busy_o <= 1'b0;
           if (!x_req_i) done <= 1'b0;
           if (x_req_i && !done) begin
@@ -60,7 +63,7 @@ module qspi_ctrl (
             txb     <= 8'h03;
             rxseq   <= 32'h0;
             rxbit   <= 5'd0;   // fresh receive counter per transaction
-            q_cs_n  <= 1'b0;
+            if (cs_sel) q_cs1_n <= 1'b0; else q_cs_n <= 1'b0;
             x_busy_o <= 1'b1;
             st      <= ST_XMIT;
           end
@@ -124,6 +127,7 @@ module qspi_ctrl (
         end
         ST_HOLD: begin
           q_cs_n   <= 1'b1;
+          q_cs1_n  <= 1'b1;
           rxact    <= 1'b0;
           x_rdy_o   <= 1'b1;
           x_busy_o  <= 1'b0;
