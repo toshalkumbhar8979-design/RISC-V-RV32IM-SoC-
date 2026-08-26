@@ -6,6 +6,7 @@ sim/smoke_pc.trace
 sim/bootrom.hex
 sim/app_flash.hex
 sim/muldiv.vcd
+muldiv.vcd
 tests/smoke.hex
 .tmp/*.vcd
 

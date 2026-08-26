@@ -22,7 +22,15 @@ module tb_soc;
   wire f_cs_n, f_sclk, f_mosi;
   wire f_miso;
 
-  riscv_soc dut (
+  `ifdef SOC_SYNC_SRAM
+  localparam DO_SYNC = 1;
+`else
+  localparam DO_SYNC = 0;
+`endif
+
+  riscv_soc #(
+    .SYNC_SRAM(DO_SYNC)
+  ) dut (
     .clk(clk), .rst_n(rst_n),
     .uart_txd(uart_txd),
     .tft_rst_n(tft_rst_n), .tft_dc(tft_dc), .tft_cs_n(tft_cs_n),
@@ -155,9 +163,9 @@ module tb_soc;
     for (k = 0; k < 64; k = k + 1) begin
       if (k != 32) begin      // mailbox word legitimately overwritten
         fword = {fv[4*k+3], fv[4*k+2], fv[4*k+1], fv[4*k+0]};
-        if (dut.u_sram.mem[k] !== fword) begin
+        if (dut.g_u_sram.u_sram.mem[k] !== fword) begin
           if (errs < 4)
-            $display("COPY word %0d: sram=%08h flash=%08h", k, dut.u_sram.mem[k], fword);
+            $display("COPY word %0d: sram=%08h flash=%08h", k, dut.g_u_sram.u_sram.mem[k], fword);
           errs = errs + 1;
         end
       end
@@ -179,7 +187,7 @@ module tb_soc;
 
     // 3) PASS mailbox (proves the timer IRQ was handled by the app)
 $display("PCEND=%08h", dut.u_core.ins_pc);
-    mb = dut.u_sram.mem[125];
+    mb = dut.g_u_sram.u_sram.mem[125];
     if (mb == 32'h600D_F00D)
       $display("TIMER IRQ + mailbox: OK (0x600DF00D)");
     else

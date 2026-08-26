@@ -241,10 +241,12 @@ module rv32_core #(
   wire ex_mret    = ins_v && mret_en;
   wire irq_ok     = irq_tmr && mstatus_mie && !ins_v;
 
-  // stalls: multi-cycle M unit, deferred memory grant
+  // stalls: multi-cycle M unit, deferred memory grant, deferred instruction
+  // grant (1-cycle-latency instruction memory, e.g. sync FPGA BRAM)
   wire md_stall   = ins_v && m_instr && !md_done;
   wire mem_stall  = ins_v && (mem_load || mem_store) && !dmem_grant;
-  wire all_stop   = md_stall || mem_stall;
+  wire if_stall   = imem_valid && !imem_grant;   // fetch issued, data not returned yet
+  wire all_stop   = md_stall || mem_stall || if_stall;
 
   wire redirect = (ex_branch || ex_trap || ex_mret || irq_ok) && !all_stop;
 
@@ -295,7 +297,8 @@ module rv32_core #(
   //  Instruction memory request
   //===============================================================
   assign imem_addr  = fetch_pc;
-  assign imem_valid = !all_stop;
+  assign imem_valid = !(md_stall || mem_stall);   // fetch request independent of
+                                                  // if_stall (avoids comb loop)
 
   //===============================================================
   //  Debug outputs

@@ -11,7 +11,10 @@
 //   0x4003_0000  Timer
 //====================================================================
 module riscv_soc #(
-  parameter integer SRAM_AW = 13          // 2^SRAM_AW words on-chip SRAM; 13 = 32 KB (32 k words)
+  parameter integer SRAM_AW = 13,          // 2^SRAM_AW words on-chip SRAM; 13 = 32 KB (32 k words)
+  parameter          SYNC_SRAM = 0        // 1 = synchronous dual-port BRAM (FPGA/E BRAM, 1-cycle
+                                          //     read latency, grants adapt). 0 = combinational
+                                          //     read wrappr (ASIC sim default).
 )(
   input  wire        clk,
   input  wire        rst_n,
@@ -23,7 +26,8 @@ module riscv_soc #(
 
   // ---------------- core -------------
   wire [31:0] imem_addr, imem_rdata, dmem_addr, dmem_wdata, dmem_rdata;
-  wire        imem_valid, dmem_valid, dmem_we, dmem_grant;
+  wire        imem_valid, imem_grant, dmem_valid, dmem_we;
+  wire        imem_grant_int, dmem_grant_int;
   wire [3:0]  dmem_wstrb;
   wire        irq_tmr_core, inst_commit, trap_active;
 
@@ -32,7 +36,7 @@ module riscv_soc #(
     .rst_n      (rst_n),
     .imem_addr  (imem_addr),
     .imem_valid (imem_valid),
-    .imem_grant (1'b1),
+    .imem_grant (imem_grant),
     .imem_rdata (imem_rdata),
     .dmem_addr  (dmem_addr),
     .dmem_valid (dmem_valid),
@@ -69,13 +73,44 @@ module riscv_soc #(
 
   // ---------------- SRAM (dual read) -------------
   wire [31:0] sram_i, sram_d;
-  sram_wrap #(.AW(SRAM_AW)) u_sram (
-    .clk     (clk),
-    .ra_addr (imem_addr[14:2] - 15'h4000), .ra_data(sram_i),
-    .rb_addr (dmem_addr[14:2] - 15'h4000), .rb_data(sram_d),
-    .we      (dmem_valid && dmem_we && sram_sel_d),
-    .w_addr  (dmem_addr[14:2] - 15'h4000), .w_strb(dmem_wstrb), .w_data(dmem_wdata)
-  );
+  generate
+    if (SYNC_SRAM) begin : g_u_sram
+      sram_dp_sync #(.AW(SRAM_AW)) u_sram (
+        .clk     (clk),
+        .ra_addr (imem_addr[14:2] - 15'h4000), .ra_data(sram_i),
+        .rb_addr (dmem_addr[14:2] - 15'h4000), .rb_data(sram_d),
+        .we      (dmem_valid && dmem_we && sram_sel_d),
+        .w_addr  (dmem_addr[14:2] - 15'h4000), .w_strb(dmem_wstrb), .w_data(dmem_wdata)
+      );
+      // 1-cycle-latency read grants: request on N, data on N+1
+      reg imem_sram_grant_d, dmem_sram_grant_d;
+      always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+          imem_sram_grant_d <= 1'b0;
+          dmem_sram_grant_d <= 1'b0;
+        end else begin
+          imem_sram_grant_d <= imem_valid && sram_sel_i;
+          dmem_sram_grant_d <= dmem_valid && !dmem_we && sram_sel_d;
+        end
+      end
+      assign imem_grant_int = (sram_sel_i) ? imem_sram_grant_d : 1'b1;
+      assign dmem_grant_int = (sram_sel_d && !dmem_we) ? dmem_sram_grant_d :
+                              ((flash_sel) ? (dmem_we ? 1'b1 : qspi_rdy) : 1'b1);
+    end else begin : g_u_sram
+      sram_wrap #(.AW(SRAM_AW)) u_sram (
+        .clk     (clk),
+        .ra_addr (imem_addr[14:2] - 15'h4000), .ra_data(sram_i),
+        .rb_addr (dmem_addr[14:2] - 15'h4000), .rb_data(sram_d),
+        .we      (dmem_valid && dmem_we && sram_sel_d),
+        .w_addr  (dmem_addr[14:2] - 15'h4000), .w_strb(dmem_wstrb), .w_data(dmem_wdata)
+      );
+      assign imem_grant_int = 1'b1;              // combinational reads always ready
+      assign dmem_grant_int = (flash_sel ? (dmem_we ? 1'b1 : qspi_rdy) : 1'b1);
+    end
+  endgenerate
+
+  assign imem_grant = imem_grant_int;
+  assign dmem_grant = dmem_grant_int;
 
   // ---------------- QSPI flash XIP -------------
   wire [31:0]  qspi_rdata;
@@ -137,7 +172,5 @@ module riscv_soc #(
               tft_sel    ? tft_rdata  :
               uart_sel   ? uart_rdata :
               timer_sel  ? tim_rdata  : 32'h0;
-
-  assign dmem_grant = flash_sel ? (dmem_we ? 1'b1 : qspi_rdy) : 1'b1;
 
 endmodule
