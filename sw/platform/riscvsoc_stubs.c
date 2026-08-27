@@ -246,6 +246,9 @@ double fabs(double x){ return x<0?-x:x; }
 float fabsf(float x){ return x<0?-x:x; }
 long labs(long x){ return x<0?-x:x; }
 // ---------------- strings.h ----------------
+int tolower(int); int toupper(int);
+typedef long time_t;
+time_t time(time_t*);
 int strcasecmp(const char*a,const char*b)
 { while(*a&&*b){int d=(unsigned char)tolower(*a)-(unsigned char)tolower(*b); if(d)return d; a++;b++;}
   return (int)((unsigned char)tolower(*a)-(unsigned char)tolower(*b)); }
@@ -266,7 +269,6 @@ int sscanf(const char *s, const char *fmt, ...)
 { (void)s;(void)fmt; return 0; }
 int scanf(const char *fmt, ...){ (void)fmt; return 0; }
 int fscanf(void *f, const char *fmt, ...){ (void)f;(void)fmt; return 0; }
-time_t time(time_t *t){ time_t v=(time_t)0; if(t)*t=v; return v; }
 struct tm *localtime(const time_t *t){ (void)t; return 0; }
 int stat(const char *p, void *s){ (void)p;(void)s; return -1; }
 int mkdir(const char*p,unsigned m){ (void)p;(void)m; return -1; }
@@ -284,6 +286,5 @@ char *strdup(const char *s)
   return d;
 }
 double atof(const char *s){ return (double)atol(s); }
-int mkdir(const char *p, unsigned int m) { (void)p;(void)m; return -1; }
-int stat(const char *p, void *s) { (void)p;(void)s; return -1; }
-double atof(const char *s) { return (double)atol(s); }
+int vsnprintf(char *out, unsigned long n, const char *fmt, void *ap)
+{ size_t o=0; vformat(out,&o,(size_t)n,fmt,*(va_list*)ap); if(n) out[o<n?o:n-1]=0; return (int)o; }

@@ -12,4 +12,5 @@ int usleep(unsigned int);
 long sysconf(int);
 int mkdir(const char*, unsigned int);
 int unlink(const char*);
+int rmdir(const char*);
 int mkdir(const char*, unsigned int);

@@ -8,3 +8,4 @@ static int *__errno_location(void) { static int e; return &e; }
 #define EEXIST  17
 #define EINVAL  22
 #define EMFILE  24
+#define EISDIR  21
