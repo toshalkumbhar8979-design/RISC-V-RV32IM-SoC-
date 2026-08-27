@@ -70,7 +70,7 @@ Rendered from the GDS-II using `open/gds2png.py`.
 
 ## Simulation Waveforms
 
-![SoC waveform](docs/media/waveform_soc.png)
+![SoC waveform](docs/media/waveform_smoke.png)
 
 *(Waveforms exported from GTKWave: SoC boot sequence, M-extension unit test,
 core smoke test.)*
