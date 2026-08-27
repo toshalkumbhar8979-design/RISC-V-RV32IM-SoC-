@@ -288,3 +288,14 @@ char *strdup(const char *s)
 double atof(const char *s){ return (double)atol(s); }
 int vsnprintf(char *out, unsigned long n, const char *fmt, void *ap)
 { size_t o=0; vformat(out,&o,(size_t)n,fmt,*(va_list*)ap); if(n) out[o<n?o:n-1]=0; return (int)o; }
+
+
+// ---------------- network / joystick stubs (single-player) ----------------
+int net_client_connected = 0;
+int drone = 0;
+int netcmds[12];
+void I_BindJoystickVariables(void) { }
+void I_InitJoystick(void) { }
+void D_ConnectNetGame(void) { }
+void D_CheckNetGame(void) { }
+int I_ConnectNetGame(void) { return 0; }
